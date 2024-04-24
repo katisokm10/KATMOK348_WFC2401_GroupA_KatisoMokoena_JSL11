@@ -6,7 +6,6 @@ import { initialData } from "./initialData.js";
 // Clear localStorag
 
 // Function checks if local storage already has data, if not it loads initialData to localStorage
-localStorage.clear()
 function initializeData() {
   if (!localStorage.getItem("tasks")) {
     // If there is no 'tasks' item in local storage, set it with initial data
