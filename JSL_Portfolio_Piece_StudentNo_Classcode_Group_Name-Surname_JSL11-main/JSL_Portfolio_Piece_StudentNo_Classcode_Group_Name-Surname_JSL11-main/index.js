@@ -47,7 +47,8 @@ function fetchAndDisplayBoardsAndTasks() {
   displayBoards(boards);
   if (boards.length > 0) {
     // Set active board to the first board or the one stored in localStorage
-    activeBoard = JSON.parse(localStorage.getItem("activeBoard")) || boards[0];
+    const localStorageBoard =JSON.parse(localStorage.getItem("activeBoard"));
+    activeBoard = localStorageBoard ? localStorageBoard : boards[0];
 
     elements.headerBoardName.textContent = activeBoard;
     styleActiveBoard(activeBoard);
@@ -255,11 +256,25 @@ function toggleSidebar(show) {
 
 // Function to toggle theme
 function toggleTheme() {
-  const body = document.body;
-  body.classList.toggle("dark-theme");
-  body.classList.toggle("light-theme");
-}
+  // Toggle the 'light-theme' class on the body element
+  document.body.classList.toggle('light-theme');
 
+  // Save the theme preference to localStorage
+  localStorage.setItem('light-theme', document.body.classList.contains('light-theme') ? 'enabled' : 'disabled');
+
+  // Get the image element
+  const logo = document.getElementById('logo');
+
+  // Check if the body has the 'light-theme' class
+  const isLightTheme = document.body.classList.contains('light-theme');
+
+  // Update the src attribute of the image based on the theme
+  if (isLightTheme) {
+    logo.src = './assets/logo-light.svg'; // Set the src for light theme
+  } else {
+    logo.src = './assets/logo-dark.svg'; // Set the src for dark theme
+  }
+}
 // Function to open edit task modal
 // Function to open edit task modal
 function openEditTaskModal(task) {
@@ -291,6 +306,7 @@ function openEditTaskModal(task) {
   toggleModal(true, elements.editTaskModal); // Show the edit task modal
 }
 
+// Function to save changes to a task
 // Function to save changes to a task
 // Function to save changes to a task
 // Function to save changes to a task
@@ -327,6 +343,9 @@ function saveTaskChanges(taskId) {
 
   // Save the updated tasks array back to local storage
   localStorage.setItem("tasks", JSON.stringify(tasks));
+
+  // Call putTask to update the task in your storage mechanism
+  putTask(taskId, tasks[existingTaskIndex]);
 
   // Refresh the UI to reflect the changes
   refreshTasksUI();
