@@ -96,6 +96,7 @@ function addTask(event) {
   }
 }
 
+
 // Add the new task to the UI
 function addTaskToUI(task) {
   const column = document.querySelector(
@@ -293,6 +294,7 @@ function openEditTaskModal(task) {
 // Function to save changes to a task
 // Function to save changes to a task
 // Function to save changes to a task
+// Function to save changes to a task
 function saveTaskChanges(taskId) {
   // Get new user inputs
   const updatedTitle = document.getElementById("edit-task-title-input").value;
@@ -302,27 +304,35 @@ function saveTaskChanges(taskId) {
   // Get the tasks from local storage
   let tasks = getTasks();
 
-  // Find the index of the task being updated
-  const taskIndex = tasks.findIndex(task => task.id === taskId);
+  // Check if a task with the same ID already exists
+  const existingTaskIndex = tasks.findIndex(task => task.id === taskId);
 
-  // Check if the task exists
-  if (taskIndex !== -1) {
-    // Update the task's properties
-    tasks[taskIndex].title = updatedTitle;
-    tasks[taskIndex].description = updatedDescription;
-    tasks[taskIndex].status = updatedStatus;
-
-    // Save the updated tasks array back to local storage
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-
-    // Refresh the UI to reflect the changes
-    refreshTasksUI();
-
-    // Close the modal
-    toggleModal(false, elements.editTaskModal);
+  if (existingTaskIndex !== -1) {
+    // If the task already exists, update its properties
+    tasks[existingTaskIndex].title = updatedTitle;
+    tasks[existingTaskIndex].description = updatedDescription;
+    tasks[existingTaskIndex].status = updatedStatus;
   } else {
-    console.error("Task not found."); // Log an error if the task is not found
+    // If the task doesn't exist, create a new task object
+    const newTask = {
+      id: taskId,
+      title: updatedTitle,
+      description: updatedDescription,
+      status: updatedStatus
+    };
+
+    // Add the new task to the tasks array
+    tasks.push(newTask);
   }
+
+  // Save the updated tasks array back to local storage
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+
+  // Refresh the UI to reflect the changes
+  refreshTasksUI();
+
+  // Close the modal
+  toggleModal(false, elements.editTaskModal);
 }
 
 
