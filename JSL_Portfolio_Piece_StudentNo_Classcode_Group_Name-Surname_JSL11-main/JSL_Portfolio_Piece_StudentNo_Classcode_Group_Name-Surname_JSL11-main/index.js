@@ -1,4 +1,4 @@
-// Import helper functions from utils
+//Import helper functions from utils
 import { createNewTask, deleteTask, getTasks, putTask } from "./utils/taskFunctions.js";
 // Import initialData
 import { initialData } from "./initialData.js";
@@ -6,6 +6,7 @@ import { initialData } from "./initialData.js";
 // Clear localStorag
 
 // Function checks if local storage already has data, if not it loads initialData to localStorage
+localStorage.clear()
 function initializeData() {
   if (!localStorage.getItem("tasks")) {
     // If there is no 'tasks' item in local storage, set it with initial data
@@ -274,7 +275,10 @@ function toggleTheme() {
   } else {
     logo.src = './assets/logo-dark.svg'; // Set the src for dark theme
   }
+  console.log(logo.src)
 }
+
+
 // Function to open edit task modal
 // Function to open edit task modal
 function openEditTaskModal(task) {
@@ -368,14 +372,5 @@ function init() {
   toggleSidebar(showSidebar);
   const isLightTheme = localStorage.getItem("light-theme") === "enabled";
   document.body.classList.toggle("light-theme", isLightTheme);
-
-  // Fetch tasks from local storage
-  const tasks = getTasks();
-
-  // Extract board names from tasks
-  const boards = [...new Set(tasks.map(task => task.board).filter(Boolean))];
-
-  // Call functions to fetch and display boards
-  fetchAndDisplayBoardsAndTasks(boards);
-  displayBoards(boards);
-}
+  fetchAndDisplayBoardsAndTasks(); // Initial display of boards and tasks
+}  
